@@ -4,3 +4,9 @@ run-jep-463:
 
 run-jep-447:
 	java --source 22 --enable-preview JEP447.java
+
+run-jep-454:
+	java --source 22 --enable-preview JEP454.java
+
+run-jep-456:
+	java --source 22 --enable-preview JEP456.java
