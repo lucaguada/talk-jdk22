@@ -19,3 +19,6 @@ run-jep-458:
 
 run-jep-459:
 	java --source 22 --enable-preview JEP459.java
+
+run-jep-460:
+	java --source 22 --enable-preview --add-modules=jdk.incubator.vector -Xmx12G JEP460.java
