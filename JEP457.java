@@ -8,25 +8,26 @@ import java.nio.file.Path;
 import static java.lang.reflect.AccessFlag.*;
 
 void main() throws IOException {
-  var codeModel = ClassFile.of().build(ClassDesc.of("HelloWorld"), clazz ->
+  var helloWorld = Path.of("socraten", "HelloWorld.class");
+  var socraten = helloWorld.getParent();
+  Files.deleteIfExists(helloWorld);
+  Files.deleteIfExists(socraten);
+
+  var bytecode = ClassFile.of().build(ClassDesc.of("socraten", "HelloWorld"), clazz ->
     clazz
-      .withField("name", ClassDesc.ofDescriptor("Ljava/lang/String;"), field ->
-        field
-          .withFlags(PRIVATE)
-      )
-      .withMethod("whoever", MethodTypeDesc.of(ClassDesc.ofDescriptor("V")), PUBLIC.ordinal(), method ->
+      .withField("name", ClassDesc.ofDescriptor("Ljava/lang/String;"), PRIVATE.mask())
+      .withMethod("main", MethodTypeDesc.of(ClassDesc.ofDescriptor("V"), ClassDesc.ofDescriptor("[Ljava/lang/String;")), PUBLIC.mask() | STATIC.mask(), method ->
         method
-          .withFlags(PRIVATE)
-          .withCode(code ->
-            code
-              .aload(0)
-              .getstatic(ClassDesc.of("java.lang", "System"), "out", ClassDesc.ofDescriptor("Ljava/io/PrintStream;"))
-              .aload(1)
-              .invokevirtual(ClassDesc.of("java.io", "PrintStream"), "println", MethodTypeDesc.of(ClassDesc.ofDescriptor("V"), ClassDesc.ofDescriptor("Ljava/lang/String;")))
-              .return_()
+          .withCode(code -> code
+            .aload(0)
+            .getstatic(ClassDesc.of("java.lang", "System"), "out", ClassDesc.ofDescriptor("Ljava/io/PrintStream;"))
+            .ldc("Hello, World!")
+            .invokevirtual(ClassDesc.of("java.io", "PrintStream"), "println", MethodTypeDesc.of(ClassDesc.ofDescriptor("V"), ClassDesc.ofDescriptor("Ljava/lang/String;")))
+            .return_()
           )
       )
   );
 
-  Files.write(Path.of("HelloWorld.class"), codeModel);
+  Files.createDirectory(socraten);
+  Files.write(helloWorld, bytecode);
 }
