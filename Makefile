@@ -14,3 +14,6 @@ run-jep-456:
 run-jep-457:
 	java --source 22 --enable-preview JEP457.java
 
+run-jep-458:
+	java --class-path '*' --source 22 --enable-preview JEP458.java
+
